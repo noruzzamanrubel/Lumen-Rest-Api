@@ -13,10 +13,21 @@
 |
 */
 
-$router->get('/', function () use ($router) {
-    // return $router->app->version();
-    return response()->json([
-        'success' => true,
-        'message' => 'Welcome to our Poll Api'
-    ]);
+// $router->get('/', function () use ($router) {
+//     // return $router->app->version();
+//     return response()->json([
+//         'success' => true,
+//         'message' => 'Welcome to our Poll Api'
+//     ]);
+// });
+
+
+$router->group(['prefix' => 'api/v1'], function () use ($router) {
+    $router->get('/', 'ExampleController@index');
+
+    //users resourse
+    $router->get('/users', 'UserController@index');
+    $router->post('/users', 'UserController@create');
+
+
 });
