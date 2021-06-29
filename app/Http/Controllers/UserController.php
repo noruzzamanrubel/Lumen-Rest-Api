@@ -24,7 +24,8 @@ class UserController extends Controller
     }
 
     public function create(Request $request){
-        
+
+        //data validation
         try {
             $this->validate($request, [
                 'full_name' => 'required',
@@ -40,6 +41,7 @@ class UserController extends Controller
            ]);
         }
 
+        //data insert
         User::insert([
             'full_name'=>$request->full_name,
             'username'=>strtolower($request->username),
@@ -50,8 +52,12 @@ class UserController extends Controller
         ]);
         return response()->json([
             'success' => true,
-            'message' => 'Your Data is Insert Successfully'
+            'message' => 'Your Data Is Insert Successfully'
         ]);
+    }
+
+    public function authenticate(){
+        
     }
 
     
