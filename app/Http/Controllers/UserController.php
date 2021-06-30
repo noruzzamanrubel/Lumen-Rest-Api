@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Carbon\Carbon;
-
+use Auth;
 
 class UserController extends Controller
 {
@@ -15,7 +15,7 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        //
+
     }
 
     public function index(){
@@ -56,8 +56,34 @@ class UserController extends Controller
         ]);
     }
 
-    public function authenticate(){
+    public function authenticate(Request $request){
+        //data validation
+        try {
+            $this->validate($request, [
+                'email' => 'required|email',
+                'password' => 'required|min:6'
+            ]);
+    
+        } catch (ValidationException $c) {
+            return response()->json([
+                'success'=> false,
+                'message'=> $e->getMessage(),
+            ]);
+        }
+
+        $token= app('auth')->attempt($request->only('email', 'password'));
         
+        if($token){
+            return response()->json([
+                'success' => true,
+                'message'=> 'User Authenticate',
+                'token'=> $token,
+            ]);
+        }
+        return response()->json([
+            'success' => false,
+            'message'=> 'Invalid User',
+        ], 400);
     }
 
     
